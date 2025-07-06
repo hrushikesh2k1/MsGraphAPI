@@ -1,0 +1,20 @@
+#Connect to Graph with necessary permissions
+Connect-MgGraph -Scopes "Group.ReadWrite.All"
+
+#Importing the Csv file that contains Group names having Header GroupNames
+$groups = Import-Csv -Path "C:\Path\groups.csv"
+
+#Loop through each row and create group
+foreach ($group in $groups){
+    $name = $group.GroupName
+
+    New-MgGroup -DisplayName $name `
+                -MailEnabled $false `
+                -MailNickname ($name -replace "\s", "") `  #generates a mail nickname, removes any spaces(\s) in the name using -replace"\s","" eg:"HR Team"-->"HRTeam
+                -SecurityEnabled $true `
+                -GroupTypes @()                            #Specifies the type of group. An empty array means it is traditional security group, for M365 groups, this would be @("Unified")
+    Write-Host "Created group: $name"
+}
+
+#If your file is simple text file without header, use the command below to get group names
+$groupNames =  Get-Content "C:\Path\groups.txt
