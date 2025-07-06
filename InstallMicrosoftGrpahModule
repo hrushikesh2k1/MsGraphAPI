@@ -1,0 +1,5 @@
+#installing the Microsoft Graph API module with no previous versions installed 
+Install-module Microsoft.Graph
+
+#Validate the installed module
+Get-InstalledModule Microsoft.Graph.*
