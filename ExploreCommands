@@ -1,0 +1,17 @@
+#Exploring Commands related to Microsoft 365 licenses, Application registrations and Teams.
+#Golden Rule for extracting Commands in Microsoft Graph
+Get-Command -Module Microsoft.Graph* *<Resources of MS Graph>*
+
+
+
+#Module Discovery
+Find-Module Microsoft.Graph* |Select-Object Name  #Will list all the commands in Graph gallery
+
+#Listing all graph commands related to Licenses 
+Get-Command -Module Microsoft.Graph* *license*
+
+#List all graph commands related to Application Registration
+Get-Command -Module Microsoft.Graph* *application*
+
+#List all graph commands related to Teams 
+Get-Command -Module Microsoft.Graph* *Team*
