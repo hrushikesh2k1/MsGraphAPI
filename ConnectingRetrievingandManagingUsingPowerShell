@@ -1,0 +1,17 @@
+#Establishing Connectiont to MSGraph using PowerShell
+Connect-Graph
+
+#Retreiving all users information from Microsoft Graph using PowerShell
+Get-MgUser
+
+#Giving additional permissions to the Microsoft graph Connection
+Connect-Graph -Scopes "User.Read","User.ReadWrite.All", "Mail.ReadWrite"
+
+#Search for delegated permissions related to sharepoint Sites
+Find-MgGraphPermission sites -PermissionTypes Delegated
+
+#Disconnect from graph
+Disconnect-Graph
+
+#Getting detailed documentation using Get-Help commands
+Get-Help Find-MsGraphPermission -Online
