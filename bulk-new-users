@@ -1,0 +1,20 @@
+Connect-MgGraph -Scopes "User.ReadWrite.All"
+
+for ($i = 1; $i -le 5; $i++) {
+   $userPrincipalName = "test_user$i@entraplayground.onmicrosoft.com"
+
+   $passwordProfile = [Microsoft.Graph.PowerShell.Models.MicrosoftGraphPasswordProfile]::new()
+   $passwordProfile.Password = "P@ssw0rd123"
+   $passwordProfile.ForceChangePasswordNextSignIn = $true
+
+   $user = [Microsoft.Graph.PowerShell.Models.MicrosoftGraphUser]::new()
+   $user.AccountEnabled = $true
+   $user.DisplayName = "Test User $i"
+   $user.MailNickname = "testuser$i"
+   $user.UserPrincipalName = $userPrincipalName
+   $user.PasswordProfile = $passwordProfile
+
+   New-MgUser -BodyParameter $user
+
+   Write-Host "✅ Created user: $userPrincipalName"
+}
