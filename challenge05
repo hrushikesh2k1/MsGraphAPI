@@ -1,0 +1,28 @@
+#challenge05
+'''
+Requesting a token using client credential flow
+'''
+#creating a hashtable for the body, the data needed for the token request
+$body = @{
+    'tenant' = $tenantid
+    'client_id'= $clientid
+    'scope' = 'https://graph.microsoft.com/v1.0/.default'
+    'client_secret' = $clientsecret
+    'grant_type' = 'client_credentials'
+}
+ 
+$param = @{
+    'uri' = 'https://login.microsoftonline.com/$tenantid/oauth2/v2.0/token'
+    'Method' = 'Post'
+    'Body' = $body
+    'contentType' = 'application/json'
+}
+ 
+$AuthResponse = Invoke-RestMethod @param
+ 
+#getting data from Azure AD
+#we simply send the token in the headers of our API request to read or modify whichever resource the token grants us access to.
+$headers = @{
+    'Authorization' = 'Bearer $($AuthResponse.access_token)'
+}
+$result = Invoke-RestMethod -Uri 'https://graph.microsoft.com/v1.0/users' -Headers $headers
