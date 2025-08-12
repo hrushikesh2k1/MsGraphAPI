@@ -1,0 +1,14 @@
+#challenge04
+'''
+Executing the same task i.e., disabling users using parallel processing
+Instead of waiting for one call to finish before starting the next,
+we can run multiple calls at the same time.
+In powershell this is done with forEach-object -parallel or background jobs
+'''
+ 
+$users = Import-Csv -Path "C:\Users\Boora.Hrushikesh3\Downloads\GroupDetailscsv.csv"
+$users | ForEach-Object -Parallel{
+    Import-Module Microsoft.Graph.
+    Update-MgUser -UserId $($user.Id) -AccountEnabled $false
+    Write-Host "user $($user.Id) is disabled "
+}-ThrottleLimit 10
