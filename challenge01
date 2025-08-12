@@ -1,0 +1,31 @@
+#Users_challenge01
+'''
+HR shares a CSV with new hires. You need to create their accounts
+in azure ad and set a temporary password
+'''
+ 
+$users = Import-Csv -Path ""
+ 
+function New-RandomPassword{
+    param([int]$length=12)
+    $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789!@#$5^&*'
+    -join ((1..$length)| ForEach-Object {($chars[(Get-Random -Maximum $chars.Length)])})
+}
+ 
+foreach($user in $users){
+    try{
+        $password = New-RandomPassword
+        New-MgUser -AccountEnabled $true`
+                    -MailNickName $user.MailNickname `
+                    -DisplayName $user.DisplayName `
+                    -UserPrincipalName $user.UserPrinicpalname `
+                    -PasswordProfile @{
+                    ForceChangePasswordNextSignIn = $true;
+                    Password = $password
+                    }
+        Write-Host "Created User: $($user.UserPrincipalName)" -ForegroundColor Green
+    }
+    catch{
+        Write-Host "Eror $_.Exception"
+    }
+}
