@@ -1,0 +1,26 @@
+#challenge02
+'''
+When employees leave, we not only disable their accounts but also remove
+assigned licenses to free them for other users. 
+take a csv from HR, disable each account and remove all licenses in one go.
+'''
+ 
+$leavers =  Import-Csv -Path ""
+foreach($user in $leavers){
+    $userObj = Get-MgUser -UserId $user.UserPrincipalName -Property AssignedLicenses
+    if(-not($userObj)){
+        Update-MgUser -UserId $userObj.Id -AccountEnabled $false
+        Write-Host "user account $user is disabld" -ForegroundColor Green
+        $assignedLicenses = $userObj.AssignedLicenses
+        if($assignedLicenses.Count -gt 0){
+            Set-MgUserLicense -UserId $userObj.Id -AddLicenses @() -RemoveLicenses $assignedLicenses
+            Write-Host "Licenses have been removed for user $user"
+        }
+        else{
+            Write-Host "User $user has no licenses assigned"
+        }
+    else{
+        Write-Host "User $user does not exists in AD" -ForegroundColor Red
+    }
+ 
+}
